@@ -27,20 +27,29 @@ export default defineConfig({
   envPrefix: ['VITE_'],
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "client", "src"),
-      "@shared": path.resolve(__dirname, "shared"),
+      "@": path.resolve(__dirname, "./src"),
+      "@shared": path.resolve(__dirname, "./shared"),
       "@ai-services": path.resolve(__dirname, "ai-services"),
     },
   },
   root: path.resolve(__dirname, "client"),
   build: {
-    outDir: path.resolve(__dirname, "dist/public"),
+    outDir: "dist",
+    sourcemap: true,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom', 'react-router-dom'],
+        },
+      },
+    },
     emptyOutDir: true,
   },
   server: {
     hmr: {
       overlay: false,
     },
+    port: 5173,
     proxy: {
       '/api': {
         target: 'http://localhost:8000',
